@@ -1,41 +1,52 @@
-# Devsecops-terraform-project
-Automated DevSecOps pipeline for Terraform infrastructure validation, security scanning, and CI/CD using GitHub Actions.
 
-----------------------------------------
-*CI/CD Flow*
+---
 
-Code → Build → Scan → Validate → Approve → Deploy
+## ⚙️ GitHub Actions Workflow
 
-*Security Shift Left*
+The CI/CD pipeline includes:
 
-Security integrated early in pipeline.
+- Terraform Init
+- Terraform Validate
+- Terraform Format Check
+- Checkov Security Scan
+- Trivy Vulnerability Scan
 
-*Terraform Best Practices*
+---
 
-reusable modules,
-variables,
-remote state,
-least privilege IAM,
-GitHub Secrets.
+## 🧠 Key Learning Outcomes
 
-Store AWS credentials securely in GitHub Secrets.
+- Understanding CI/CD pipelines
+- Terraform workflow automation
+- DevSecOps integration
+- Security scanning in pipelines
+- GitHub Actions automation
 
-------------------------------------------
-1.Developer pushes code to GitHub
+---
 
-2.GitHub Actions pipeline triggers automatically
+## 📌 Note
 
-3.Terraform validates infrastructure code
+This project is designed for learning and demonstration purposes.  
+It can be extended with AWS deployment using GitHub Secrets and Terraform apply.
 
-4.Checkov scans Terraform for misconfigurations
+---
 
-5.Trivy performs vulnerability scanning
+## 📊 Architecture Diagram
 
-6.SonarQube checks code quality/security
+See below for system design.
 
-7.Approval stage before deployment
-
-8.Terraform apply deploys infrastructure to AWS
-
-----------------------------------------
+Developer
+   ↓
+GitHub Repository (Terraform Code)
+   ↓
+GitHub Actions Pipeline
+   ↓
+-----------------------------
+| Terraform Init/Validate   |
+| Format Check              |
+| Checkov Security Scan     |
+| Trivy Vulnerability Scan  |
+-----------------------------
+   ↓
+(OPTIONAL)
+AWS Infrastructure Deployment (terraform apply)
 
