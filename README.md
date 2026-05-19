@@ -11,10 +11,10 @@ Security integrated early in pipeline.
 
 *Terraform Best Practices*
 
-reusable modules
-variables
-remote state
-least privilege IAM
-GitHub Secrets
+reusable modules,
+variables,
+remote state,
+least privilege IAM,
+GitHub Secrets.
 
 Store AWS credentials securely in GitHub Secrets.
