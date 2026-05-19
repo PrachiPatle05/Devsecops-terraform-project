@@ -1,18 +1,6 @@
 # Devsecops-terraform-project
 Automated DevSecOps pipeline for Terraform infrastructure validation, security scanning, and CI/CD using GitHub Actions.
 
-devsecops-terraform-project/
-│
-├── .github/workflows/
-│   └── terraform.yml
-│
-├── terraform/
-│   ├── main.tf
-│   ├── variables.tf
-│   ├── outputs.tf
-│
-├── README.md
-
 ----------------------------------------
 *CI/CD Flow*
 
