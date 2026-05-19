@@ -35,18 +35,35 @@ It can be extended with AWS deployment using GitHub Secrets and Terraform apply.
 See below for system design.
 
 Developer
+
    ↓
+   
 GitHub Repository (Terraform Code)
+
    ↓
+   
 GitHub Actions Pipeline
+
    ↓
+   
 -----------------------------
+
 | Terraform Init/Validate   |
+
 | Format Check              |
+
 | Checkov Security Scan     |
+
 | Trivy Vulnerability Scan  |
+
 -----------------------------
+
    ↓
+   
 (OPTIONAL)
+
 AWS Infrastructure Deployment (terraform apply)
+
+
+-----------------
 
