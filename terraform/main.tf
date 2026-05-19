@@ -1,12 +1,15 @@
+# -----------------------------------
+# AWS Provider
+# -----------------------------------
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_region
 }
 
-# -----------------------------
+# -----------------------------------
 # VPC
-# -----------------------------
+# -----------------------------------
 resource "aws_vpc" "main_vpc" {
-  cidr_block           = "10.0.0.0/16"
+  cidr_block           = var.vpc_cidr
   enable_dns_support   = true
   enable_dns_hostnames = true
 
@@ -15,12 +18,12 @@ resource "aws_vpc" "main_vpc" {
   }
 }
 
-# -----------------------------
+# -----------------------------------
 # Public Subnet
-# -----------------------------
+# -----------------------------------
 resource "aws_subnet" "public_subnet" {
   vpc_id                  = aws_vpc.main_vpc.id
-  cidr_block              = "10.0.1.0/24"
+  cidr_block              = var.subnet_cidr
   availability_zone       = "us-east-1a"
   map_public_ip_on_launch = true
 
@@ -29,9 +32,9 @@ resource "aws_subnet" "public_subnet" {
   }
 }
 
-# -----------------------------
+# -----------------------------------
 # Internet Gateway
-# -----------------------------
+# -----------------------------------
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.main_vpc.id
 
@@ -40,9 +43,9 @@ resource "aws_internet_gateway" "igw" {
   }
 }
 
-# -----------------------------
+# -----------------------------------
 # Route Table
-# -----------------------------
+# -----------------------------------
 resource "aws_route_table" "public_rt" {
   vpc_id = aws_vpc.main_vpc.id
 
@@ -56,24 +59,24 @@ resource "aws_route_table" "public_rt" {
   }
 }
 
-# -----------------------------
+# -----------------------------------
 # Route Table Association
-# -----------------------------
+# -----------------------------------
 resource "aws_route_table_association" "public_assoc" {
   subnet_id      = aws_subnet.public_subnet.id
   route_table_id = aws_route_table.public_rt.id
 }
 
-# -----------------------------
+# -----------------------------------
 # Security Group
-# -----------------------------
+# -----------------------------------
 resource "aws_security_group" "web_sg" {
   name        = "web-security-group"
   description = "Allow SSH and HTTP traffic"
   vpc_id      = aws_vpc.main_vpc.id
 
   ingress {
-    description = "SSH Access"
+    description = "Allow SSH"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
@@ -81,7 +84,7 @@ resource "aws_security_group" "web_sg" {
   }
 
   ingress {
-    description = "HTTP Access"
+    description = "Allow HTTP"
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
@@ -97,29 +100,30 @@ resource "aws_security_group" "web_sg" {
   }
 
   tags = {
-    Name = "web-sg"
+    Name = "web-security-group"
   }
 }
 
-# -----------------------------
+# -----------------------------------
 # EC2 Instance
-# -----------------------------
+# -----------------------------------
 resource "aws_instance" "web_server" {
-  ami                    = "ami-0c02fb55956c7d316"
-  instance_type          = "t2.micro"
-  subnet_id              = aws_subnet.public_subnet.id
-  vpc_security_group_ids = [aws_security_group.web_sg.id]
+  ami                         = var.ami_id
+  instance_type               = var.instance_type
+  subnet_id                   = aws_subnet.public_subnet.id
+  vpc_security_group_ids      = [aws_security_group.web_sg.id]
+  associate_public_ip_address = true
 
   tags = {
     Name = "devsecops-ec2"
   }
 }
 
-# -----------------------------
+# -----------------------------------
 # S3 Bucket
-# -----------------------------
+# -----------------------------------
 resource "aws_s3_bucket" "demo_bucket" {
-  bucket = "devsecops-demo-bucket-123456"
+  bucket = var.bucket_name
 
   tags = {
     Name        = "DevSecOpsBucket"
@@ -127,9 +131,9 @@ resource "aws_s3_bucket" "demo_bucket" {
   }
 }
 
-# -----------------------------
+# -----------------------------------
 # S3 Bucket Versioning
-# -----------------------------
+# -----------------------------------
 resource "aws_s3_bucket_versioning" "versioning" {
   bucket = aws_s3_bucket.demo_bucket.id
 
